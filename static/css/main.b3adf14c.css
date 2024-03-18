@@ -1,0 +1,2 @@
+.container{text-align:center}canvas{border:1px solid #000;margin-top:20px}.game-over{color:red;font-size:24px;font-weight:700;margin-top:20px}.minesweeper{text-align:center}.grid{border:1px solid #333;display:inline-block}.cell,.row{display:flex}.cell{align-items:center;border:1px solid #333;cursor:pointer;height:30px;justify-content:center;width:30px}.cell.revealed{background-color:#ddd}.message{font-size:24px;font-weight:700;margin-top:20px}
+/*# sourceMappingURL=main.b3adf14c.css.map*/
