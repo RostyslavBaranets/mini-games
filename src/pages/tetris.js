@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../css/tetris.css';
 
-const numRows = 20;
-const numCols = 10;
-const blockSize = 30;
+const numRows = 30;
+const numCols = 20;
+const blockSize = 22;
 
 const shapes = [
   [
@@ -35,7 +35,7 @@ const shapes = [
   ],
 ];
 
-class Tetris extends Component {
+class Tetris extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,9 +43,14 @@ class Tetris extends Component {
       currentShape: this.createShape(),
       currentX: Math.floor(numCols / 2) - 1,
       currentY: 0,
-      intervalId: null,
+      interval: null,
       gameOver: false,
+      score: 0,
+      shapesGenerated: 0, // Доба
+      speed: 500,
     };
+
+    this.restartGame = this.restartGame.bind(this);
   }
 
   componentDidMount() {
@@ -54,7 +59,7 @@ class Tetris extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.intervalId);
+    clearInterval(this.state.interval);
     document.removeEventListener('keydown', this.handleKeyPress);
   }
 
@@ -129,18 +134,23 @@ class Tetris extends Component {
         currentY: prevState.currentY + 1,
       }));
     } else {
-      this.mergeShapeWithBoard();
-      this.setState({ currentShape: this.createShape(), currentX: Math.floor(numCols / 2) - 1, currentY: 0 });
+      if (this.state.currentY === 0) {
+        this.setState({ gameOver: true });
+        clearInterval(this.state.interval);
+      } else if (this.state.currentY + this.state.currentShape.length >= numRows) {
+        this.mergeShapeWithBoard();
+        this.setState({ currentShape: this.createShape(), currentX: Math.floor(numCols / 2) - 1, currentY: 0 });
+      } else {
+        this.mergeShapeWithBoard();
+        this.setState({ currentShape: this.createShape(), currentX: Math.floor(numCols / 2) - 1, currentY: 0 });
+      }
     }
 
-    if (this.state.currentY + this.state.currentShape.length >= numRows) {
-      this.mergeShapeWithBoard();
-      this.setState({ currentShape: this.createShape(), currentX: Math.floor(numCols / 2) - 1, currentY: 0 });
-    }
+
   }
 
   mergeShapeWithBoard() {
-    const { currentShape, currentX, currentY, board } = this.state;
+    const { currentShape, currentX, currentY, board, shapesGenerated, speed } = this.state;
     for (let y = 0; y < currentShape.length; y++) {
       for (let x = 0; x < currentShape[y].length; x++) {
         if (currentShape[y][x]) {
@@ -148,23 +158,46 @@ class Tetris extends Component {
         }
       }
     }
+  
+    this.setState((prevState) => ({ shapesGenerated: prevState.shapesGenerated + 1 }));
+
+    if ((shapesGenerated + 1) % 10 === 0 && shapesGenerated !== 0 && speed > 100) {
+      const newSpeed = speed - 25;
+      this.setState({ speed: newSpeed });
+      
+      clearInterval(this.state.interval);
+      const newIntervalId = setInterval(() => {
+        this.moveShapeDown();
+      }, newSpeed);
+      this.setState({ interval: newIntervalId });
+    }
+    console.log(speed);
     this.removeFilledRows();
   }
 
   removeFilledRows() {
-    const { board } = this.state;
+    const { board, score } = this.state;
     let newBoard = board.filter((row) => row.includes(0));
+    const numRowsRemoved = numRows - newBoard.length;
     while (newBoard.length < numRows) {
       newBoard.unshift(Array(numCols).fill(0));
     }
-    this.setState({ board: newBoard });
+
+    let newScore = 0;
+    if (numRowsRemoved) {
+      newScore = score + Math.pow(2, numRowsRemoved - 1) * 100;
+    } else {
+      newScore = score + 10;
+    }
+    
+    this.setState({ board: newBoard, score: newScore });
   }
 
   startGame() {
     const intervalId = setInterval(() => {
       this.moveShapeDown();
-    }, 500);
-    this.setState({ intervalId });
+    }, this.state.speed);
+    this.setState({ interval: intervalId });
   }
 
   handleKeyPress = (event) => {
@@ -182,27 +215,82 @@ class Tetris extends Component {
   };
 
   moveShapeHorizontally(dx) {
-    if (this.isValidMove(dx)) {
-      this.setState((prevState) => ({
-        currentX: prevState.currentX + dx,
-      }));
+    const { currentX, currentShape, currentY, board } = this.state;
+    const shapeWidth = currentShape[0].length;
+    const maxRight = numCols - shapeWidth;
+    const newPosX = currentX + dx;
+
+    let newX;
+    if (newPosX < 0) {
+      newX = maxRight;
+    } else if (newPosX > maxRight) {
+      newX = 0;
+    } else {
+      newX = newPosX;
+    }
+
+    let canMove = true;
+    for (let y = 0; y < currentShape.length; y++) {
+      for (let x = 0; x < currentShape[y].length; x++) {
+        if (currentShape[y][x]) {
+          const targetX = newX + x;
+          const targetY = currentY + y;
+          if (board[targetY] && board[targetY][targetX]) {
+            canMove = false;
+            break;
+          }
+        }
+      }
+      if (!canMove) break;
+    }
+
+    if (canMove) {
+      this.setState({ currentX: newX });
     }
   }
 
   rotateShape() {
-    const { currentShape } = this.state;
+    const { currentShape, currentX } = this.state;
     const rotatedShape = currentShape[0].map((_, index) => currentShape.map((row) => row[index])).reverse();
+    let newX = currentX;
+    
+    if (currentX + rotatedShape[0].length > numCols) {
+      newX = numCols - rotatedShape[0].length;
+    }
+    if (newX < 0) {
+      newX = 0;
+    }
+    if (newX !== currentX) {
+      this.setState({ currentX: newX });
+    }
     if (this.isValidMove(0, rotatedShape)) {
       this.setState({ currentShape: rotatedShape });
     }
   }
 
+  restartGame() {
+    clearInterval(this.state.interval);
+    this.setState({
+      board: this.createBoard(),
+      currentShape: this.createShape(),
+      currentX: Math.floor(numCols / 2) - 1,
+      currentY: 0,
+      interval: null,
+      gameOver: false,
+      score: 0,
+      shapesGenerated: 0,
+      speed: 500,
+    });
+    this.startGame();
+  }
+
   render() {
-    const { gameOver } = this.state;
+    const { gameOver, score } = this.state;
 
     return (
       <div className="container">
         <h1>Tetris</h1>
+        <div>Score: {score}</div>
         <canvas
           ref={(canvas) => {
             this.canvas = canvas;
@@ -216,6 +304,7 @@ class Tetris extends Component {
           height={numRows * blockSize}
         ></canvas>
         {gameOver && <div className="game-over">Game Over</div>}
+        <div><button onClick={this.restartGame}>Restart</button></div>
       </div>
     );
   }

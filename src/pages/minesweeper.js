@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/minesweeper.css'
+import '../css/minesweeper.css';
 
 const numRows = 10;
 const numCols = 10;
@@ -14,11 +14,10 @@ class Minesweeper extends React.Component {
       gameOver: false,
       win: false,
       timer: 0,
+      timerInterval: null,
       started: false,
       flags: numMines,
     };
-
-    this.timerInterval = null;
   }
 
   componentDidMount() {
@@ -26,7 +25,7 @@ class Minesweeper extends React.Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.timerInterval);
+    clearInterval(this.state.timerInterval);
   }
 
   initializeGame() {
@@ -39,6 +38,7 @@ class Minesweeper extends React.Component {
       gameOver: false,
       win: false,
       timer: 0,
+      timerInterval: null,
       started: false,
       flags: numMines,
     });
@@ -184,7 +184,7 @@ class Minesweeper extends React.Component {
   }
 
   handleGameOver() {
-    clearInterval(this.timerInterval);
+    clearInterval(this.state.timerInterval);
     const { grid } = this.state;
     const newGrid = grid.map(row =>
       row.map(cell => ({
@@ -205,7 +205,7 @@ class Minesweeper extends React.Component {
       });
     });
     if (countRevealed === countSafeCells) {
-      clearInterval(this.timerInterval);
+      clearInterval(this.state.timerInterval);
       this.setState({ win: true }); 
     }
   }
@@ -221,16 +221,16 @@ class Minesweeper extends React.Component {
   }
 
   startTimer() {
-    this.timerInterval = setInterval(() => {
+    const timerInterval = setInterval(() => {
       this.setState(prevState => ({
         timer: prevState.timer + 1,
-
       }));
     }, 1000);
+    this.setState({ timerInterval });
   }
 
   resetGame() {
-    clearInterval(this.timerInterval);
+    clearInterval(this.state.timerInterval);
     this.initializeGame();
   }
 
