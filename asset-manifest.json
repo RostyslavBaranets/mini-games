@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "//rostyslavbaranets.github.io/mini-games/static/css/main.b3adf14c.css",
-    "main.js": "//rostyslavbaranets.github.io/mini-games/static/js/main.6b492504.js",
-    "index.html": "//rostyslavbaranets.github.io/mini-games/index.html",
-    "main.b3adf14c.css.map": "//rostyslavbaranets.github.io/mini-games/static/css/main.b3adf14c.css.map",
-    "main.6b492504.js.map": "//rostyslavbaranets.github.io/mini-games/static/js/main.6b492504.js.map"
+    "main.css": "//rostyslavbaranets.github.io/mini-games/build/static/css/main.b3adf14c.css",
+    "main.js": "//rostyslavbaranets.github.io/mini-games/build/static/js/main.6b492504.js",
+    "index.html": "//rostyslavbaranets.github.io/mini-games/build/index.html",
+    "main.b3adf14c.css.map": "//rostyslavbaranets.github.io/mini-games/build/static/css/main.b3adf14c.css.map",
+    "main.6b492504.js.map": "//rostyslavbaranets.github.io/mini-games/build/static/js/main.6b492504.js.map"
   },
   "entrypoints": [
     "static/css/main.b3adf14c.css",
