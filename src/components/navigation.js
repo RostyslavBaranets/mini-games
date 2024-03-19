@@ -7,7 +7,8 @@ class Navigation extends React.Component {
       <nav>
         <ul>
           <li><Link to="/minesweeper">Minesweeper</Link></li>
-          <li><Link to="/tetris">tetris</Link></li>
+          <li><Link to="/tetris">Tetris</Link></li>
+          <li><Link to="/match3">Match3</Link></li>
         </ul>
       </nav>
     )
