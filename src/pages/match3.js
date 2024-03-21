@@ -4,6 +4,7 @@ import '../css/match3.css';
 const ROWS = 8;
 const COLS = 8;
 const CELL_SIZE = 50;
+const GAME_DURATION = 3 * 60 * 1000;
 
 class Match3 extends Component {
   constructor(props) {
@@ -11,43 +12,109 @@ class Match3 extends Component {
     this.state = {
       board: this.createBoard(),
       selectedCell: null,
-      isAnimating: false
+      isAnimating: false,
+      score: 0,
+      timeLeft: GAME_DURATION,
+      gameOver: false,
+      
     };
+    this.isMatched = false;
+    this.restartGame = this.restartGame.bind(this);
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(() => this.tick(),1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState(prevState => ({ timeLeft: prevState.timeLeft - 1000 }), () => {
+      if (this.state.timeLeft <= 0) {
+        clearInterval(this.timerID);
+        this.setState({ gameOver: true });
+      }
+    });
   }
 
   createBoard() {
     const board = [];
     for (let row = 0; row < ROWS; row++) {
       const newRow = [];
+      let prevCell = null;
+      let prevPrevCell = null;
       for (let col = 0; col < COLS; col++) {
-        newRow.push(this.randomCell());
+        let newCell = this.randomUniqueCell(prevCell, prevPrevCell, board, row, col);
+        newRow.push(newCell);
+        prevPrevCell = prevCell;
+        prevCell = newCell;
       }
       board.push(newRow);
     }
     return board;
   }
 
+  randomUniqueCell(prevCell, prevPrevCell, board, row, col) {
+    let newCell = this.randomCell();
+    while (newCell === prevCell && newCell === prevPrevCell) {
+      newCell = this.randomCell();
+    }
+    while (
+      row >= 2 &&
+      newCell === board[row - 1][col] &&
+      newCell === board[row - 2][col]
+    ) {
+      newCell = this.randomCell();
+    }
+    return newCell;
+}
+
   randomCell() {
-    const colors = ['red', 'green', 'blue', 'yellow'];
+    const colors = ['red', 'green', 'blue', 'yellow', 'purple'];
     return colors[Math.floor(Math.random() * colors.length)];
   }
 
-  handleClick = (row, col) => {
-    if (this.state.isAnimating) return;
+  handleClick(row, col) {
+    if (this.state.isAnimating || this.state.gameOver) return;
 
+    this.isMatched = false;
     const { selectedCell } = this.state;
+
     if (selectedCell) {
       if (this.areNeighbors(selectedCell, { row, col })) {
         const newBoard = this.swapCells(selectedCell, { row, col });
-        this.setState({ board: newBoard, selectedCell: null, isAnimating: true });
+        this.setState({ board: newBoard, isAnimating: true });
+
         setTimeout(() => {
-          this.handleMatches();
+          this.matches();
         }, 300);
+
+        setTimeout(() => {
+          if (this.isMatched === false) {
+            const newBoard = this.swapCells({ row, col}, selectedCell );
+            this.setState({ board: newBoard });
+          }
+        }, 300);
+        this.setState({ selectedCell: null });
       } else {
         this.setState({ selectedCell: { row, col } });
       }
     } else {
       this.setState({ selectedCell: { row, col } });
+    }
+  }
+
+  removeCellsInRow(row, startCol, endCol, board) {
+    for (let col = startCol; col <= endCol; col++) {
+      board[row][col] = null;
+    }
+  };
+
+  removeCellsInCol(col, startRow, endRow, board) {
+    for (let row = startRow; row <= endRow; row++) {
+      board[row][col] = null;
     }
   };
 
@@ -66,63 +133,73 @@ class Match3 extends Component {
     return newBoard;
   }
 
-  handleMatches() {
-    const { board } = this.state;
+  matches() {
+    const { board, score } = this.state;
     let newBoard = [...board];
     let foundMatch = false;
-  
-    const removeNeighbors = (row, col, color) => {
-      if (
-        row < 0 || row >= ROWS || col < 0 || col >= COLS ||
-        newBoard[row][col] !== color || newBoard[row][col] === null
-      ) {
-        return;
-      }
-      newBoard[row][col] = null;
-
-      removeNeighbors(row + 1, col, color);
-      removeNeighbors(row - 1, col, color);
-      removeNeighbors(row, col + 1, color);
-      removeNeighbors(row, col - 1, color);
-    };
+    let newScore = score;
   
     for (let row = 0; row < ROWS; row++) {
-      for (let col = 0; col < COLS - 2; col++) {
-        if (
-          board[row][col] &&
-          board[row][col] === board[row][col + 1] &&
-          board[row][col] === board[row][col + 2]
-        ) {
-          removeNeighbors(row, col, board[row][col]);
-          foundMatch = true;
+      let matchCount = 1;
+      for (let col = 0; col < COLS - 1; col++) {
+        if (board[row][col] && board[row][col] === board[row][col + 1]) {
+          matchCount++;
+          if (matchCount >= 3 && (col === COLS - 2 || board[row][col] !== board[row][col + 2])) {
+            this.removeCellsInRow(row, col - matchCount + 2, col + 1, newBoard);
+            newScore += this.calculateScore(matchCount);
+            foundMatch = true;
+            matchCount = 1;
+          }
+        } else {
+          if (matchCount >= 3) {
+            this.removeCellsInRow(row, col - matchCount + 1, col, newBoard);
+            foundMatch = true;
+            newScore += this.calculateScore(matchCount);
+          }
+          matchCount = 1;
         }
       }
     }
   
     for (let col = 0; col < COLS; col++) {
-      for (let row = 0; row < ROWS - 2; row++) {
-        if (
-          board[row][col] &&
-          board[row][col] === board[row + 1][col] &&
-          board[row][col] === board[row + 2][col]
-        ) {
-          removeNeighbors(row, col, board[row][col]);
-          foundMatch = true;
+      let matchCount = 1;
+      for (let row = 0; row < ROWS - 1; row++) {
+        if (board[row][col] && board[row][col] === board[row + 1][col]) {
+          matchCount++;
+          if (matchCount >= 3 && (row === ROWS - 2 || board[row][col] !== board[row + 2][col])) {
+            this.removeCellsInCol(col, row - matchCount + 2, row + 1, newBoard);
+            foundMatch = true;
+            newScore += this.calculateScore(matchCount);
+            matchCount = 1;
+          }
+        } else {
+          if (matchCount >= 3) {
+            this.removeCellsInCol(col, row - matchCount + 1, row, board);
+            foundMatch = true;
+            newScore += this.calculateScore(matchCount);
+          }
+          matchCount = 1;
         }
       }
     }
-  
+
     if (foundMatch) {
-      this.setState({ board: newBoard });
+      this.isMatched = foundMatch;
+      console.log(this.isMatched, foundMatch)
       setTimeout(() => {
-        this.handleFalling();
+        this.setState({ board: newBoard, score: newScore });
+        this.fallingCell();
       }, 300);
     } else {
       this.setState({ isAnimating: false });
     }
   }
 
-  handleFalling() {
+  calculateScore(matchCount) {
+    return (matchCount % 3 + 1) * 10;
+  }
+
+  fallingCell() {
     const { board } = this.state;
     let newBoard = [...board];
     let emptyCells = 0;
@@ -149,18 +226,38 @@ class Match3 extends Component {
     setTimeout(() => {
       this.setState({ board: newBoard });
       if (emptyCells > 0) {
-        this.handleFalling()
+        this.fallingCell();
       } else {
-        this.handleMatches();
+        this.matches();
       }
     }, 300);
   }
 
+  restartGame() {
+    clearInterval(this.timerID);
+    this.setState({
+      board: this.createBoard(),
+      selectedCell: null,
+      isAnimating: false,
+      score: 0,
+      timeLeft: GAME_DURATION,
+      gameOver: false
+    }, () => {
+      this.timerID = setInterval(() => this.tick(), 1000);
+    });
+  }
+
   render() {
-    const { board } = this.state;
+    const { board, score, timeLeft, gameOver } = this.state;
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
     return (
       <div className="match3-game">
+        <div className="score">Score: {score}</div>
+        <div className="time-left">Time Left: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</div>
+        {gameOver && <div className="game-over">Game Over</div>}
+        <div><button onClick={this.restartGame}>Restart</button></div>
         <div className="board">
           {board.map((row, rowIndex) => (
             <div key={rowIndex} className="row">

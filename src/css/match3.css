@@ -2,7 +2,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
+}
+
+.score {
+  display: flex;
 }
 
 .board {
@@ -36,4 +41,8 @@
 
 .yellow {
   background-color: yellow;
+}
+
+.purple {
+  background-color: purple;
 }
