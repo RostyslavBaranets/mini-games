@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../css/match3.css';
 
 const ROWS = 8;
@@ -6,7 +6,7 @@ const COLS = 8;
 const CELL_SIZE = 50;
 const GAME_DURATION = 3 * 60 * 1000;
 
-class Match3 extends Component {
+class Match3 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -254,6 +254,7 @@ class Match3 extends Component {
 
     return (
       <div className="match3-game">
+        <h1>Match3</h1>
         <div className="score">Score: {score}</div>
         <div className="time-left">Time Left: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</div>
         {gameOver && <div className="game-over">Game Over</div>}

@@ -4,6 +4,7 @@ import Navigation from './components/navigation';
 import Tetris from './pages/tetris';
 import Minesweeper from './pages/minesweeper';
 import Match3 from './pages/match3';
+import FlappyBird from './pages/flappybird';
 
 class App extends React.Component{
   render() {
@@ -16,6 +17,7 @@ class App extends React.Component{
               <Route path="/minesweeper" element={<Minesweeper />} />
               <Route path="/tetris" element={<Tetris />} />
               <Route path="/match3" element={<Match3 />} />
+              <Route path="/flappybird" element={<FlappyBird />} />
             </Routes>
           </div>
         </Router>
