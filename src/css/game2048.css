@@ -1,0 +1,98 @@
+.game-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.board {
+  display: flex;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+
+.row {
+  display: flex;
+}
+
+.tile {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.tile-2 {
+  background-color: #eee4da;
+  color: #776e65;
+}
+
+.tile-4 {
+  background-color: #ede0c8;
+  color: #776e65;
+}
+
+.tile-8 {
+  background-color: #f2b179;
+  color: #f9f6f2;
+}
+
+.tile-16 {
+  background-color: #f59563;
+  color: #f9f6f2;
+}
+
+.tile-32 {
+  background-color: #f67c5f;
+  color:#f9f6f2;
+}
+
+.tile-64 {
+  background-color: #f65e3b;
+  color: #f9f6f2;
+}
+
+.tile-128 {
+  background-color: #edcf72;
+  color: #f9f6f2;
+}
+
+.tile-256 {
+  background-color: #edcc61;
+  color: #f9f6f2;
+}
+
+.tile-512 {
+  background-color: #edc850;
+  color: #f9f6f2;
+}
+
+.tile-1024 {
+  background-color: #edc53f;
+  color: #f9f6f2;
+}
+
+.tile-2048 {
+  background-color: #edc22e;
+  color: #f9f6f2;
+}
+
+.game-over {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff6347;
+}

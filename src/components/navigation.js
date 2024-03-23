@@ -10,6 +10,7 @@ class Navigation extends React.Component {
           <li><Link to="/tetris">Tetris</Link></li>
           <li><Link to="/match3">Match3</Link></li>
           <li><Link to="/flappybird">Flappy Bird</Link></li>
+          <li><Link to="/game2048">2048</Link></li>
         </ul>
       </nav>
     )
