@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/tetris.css';
+import '../css/tetris.scss';
 
 const numRows = 30;
 const numCols = 20;

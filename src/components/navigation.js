@@ -6,11 +6,11 @@ class Navigation extends React.Component {
     return (
       <nav>
         <ul>
-          <li><Link to="/minesweeper">Minesweeper</Link></li>
-          <li><Link to="/tetris">Tetris</Link></li>
-          <li><Link to="/match3">Match3</Link></li>
-          <li><Link to="/flappybird">Flappy Bird</Link></li>
-          <li><Link to="/game2048">2048</Link></li>
+          <li><Link to="/mini-games/minesweeper">Minesweeper</Link></li>
+          <li><Link to="/mini-games/tetris">Tetris</Link></li>
+          <li><Link to="/mini-games/match3">Match3</Link></li>
+          <li><Link to="/mini-games/flappybird">Flappy Bird</Link></li>
+          <li><Link to="/mini-games/game2048">2048</Link></li>
         </ul>
       </nav>
     )

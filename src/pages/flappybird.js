@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/flappybird.css';
+import '../css/flappybird.scss';
 
 class FlappyBird extends React.Component {
   constructor(props) {

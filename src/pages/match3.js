@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/match3.css';
+import '../css/match3.scss';
 
 const ROWS = 8;
 const COLS = 8;

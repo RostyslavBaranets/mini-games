@@ -1,0 +1,62 @@
+@import "nullstyle.scss";
+@import "const.scss";
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('../fonts/PixelifySans-Regular.ttf') format('woff');
+}
+
+a {
+  color: $fclr1;
+}
+
+#root {
+  height: 100%;
+}
+
+.body {
+  font-family: 'MyFont', sans-serif;
+  color: $fclr1;
+  height: 100%;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+button {
+  color: $fclr1;
+  font-size: 17px;
+  background-color: $clr1;
+  padding: 5px 10px;
+  border: 5px solid $clr2;
+  border-radius: 10px;
+  &:hover {
+    background-color: $clr2;
+  }
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  background-color: $clr1;
+  height: 50px;
+  .logo {
+    top: 5%;
+    height: 90%;
+    width: 70px;
+    background-image: url(../img/logo2.png);
+    background-size: 100% 100%;
+  }
+}
+
+main {
+  height: calc(100% - 50px);
+  background-image: url(../img/bg.jpeg);
+  background-size: cover;
+  background-position: center;
+}

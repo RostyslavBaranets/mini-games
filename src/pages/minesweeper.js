@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/minesweeper.css';
+import '../css/minesweeper.scss';
 
 const numRows = 10;
 const numCols = 10;
@@ -249,7 +249,7 @@ class Minesweeper extends React.Component {
     return (
       <div
         key={`${cell.x}-${cell.y}`}
-        className={`cell ${cell.revealed ? 'revealed' : ''}`}
+        className={`ms-cell ${cell.revealed ? 'revealed' : ''}`}
         onClick={() => this.handleClick(cell.x, cell.y)}
         onContextMenu={(e) => this.handleRightClick(e, cell.x, cell.y)}
       >
@@ -264,20 +264,20 @@ class Minesweeper extends React.Component {
     return (
       <div className="minesweeper">
         <h1>Minesweeper</h1>
-        <div className="grid">
+        <div className="ms-header">
+          <div className="ms-timer">Time: {timer}</div>
+          <div className="ms-flags">Flags: {flags}</div>
+          <button onClick={() => this.resetGame()}>New Game</button>
+        </div>
+        <div className="ms-grid">
           {grid.map((row, rowIndex) => (
-            <div key={rowIndex} className="row">
+            <div key={rowIndex} className="ms-row">
               {row.map((cell) => this.renderCell(cell))}
             </div>
           ))}
         </div>
-        <div className="game-info">
-          <div className="timer">Time: {timer}</div>
-          <div className="flags">Flags: {flags}</div>
-          <button onClick={() => this.resetGame()}>New Game</button>
-        </div>
-        {gameOver && <div className="message">Game Over</div>}
-        {win && <div className="message">You Win!</div>}
+        {gameOver && <h2 className="ms-message">Game Over</h2>}
+        {win && <h2 className="ms-message">You Win!</h2>}
       </div>
     );
   }

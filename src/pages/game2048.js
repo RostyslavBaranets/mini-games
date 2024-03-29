@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/game2048.css';
+import '../css/game2048.scss';
 
 class Game2048 extends Component {
   constructor(props) {
