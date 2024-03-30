@@ -55,8 +55,12 @@ header {
 }
 
 main {
-  height: calc(100% - 50px);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100% - 50px);
+  padding-bottom: 50px;
   background-image: url(../img/bg.jpeg);
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }

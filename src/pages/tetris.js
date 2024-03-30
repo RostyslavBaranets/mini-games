@@ -1,9 +1,9 @@
 import React from 'react';
 import '../css/tetris.scss';
 
-const numRows = 30;
-const numCols = 20;
-const blockSize = 22;
+const numRows = 25;
+const numCols = 15;
+const blockSize = 25;
 
 const shapes = [
   [
@@ -46,7 +46,7 @@ class Tetris extends React.Component {
       interval: null,
       gameOver: false,
       score: 0,
-      shapesGenerated: 0, // Доба
+      shapesGenerated: 0,
       speed: 500,
     };
 
@@ -80,21 +80,33 @@ class Tetris extends React.Component {
     return shapes[index];
   }
 
-  drawBlock(ctx, x, y) {
-    ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
-    ctx.strokeRect(x * blockSize, y * blockSize, blockSize, blockSize);
+  drawBlock(ctx, x, y, color = '#c54a8a') {
+    const borderWidth = 3;
+    ctx.fillStyle = '#da5672';
+    ctx.fillRect(x * blockSize, y * blockSize, blockSize, borderWidth);
+    ctx.fillRect(x * blockSize, y * blockSize, borderWidth, blockSize);
+
+    ctx.fillStyle = '#7e1fdc';
+    ctx.fillRect(x * blockSize, (y + 1) * blockSize - borderWidth, blockSize, borderWidth);
+    ctx.fillRect((x + 1) * blockSize - borderWidth, y * blockSize, borderWidth, blockSize);
+
+    ctx.fillStyle = color;
+    ctx.fillRect(x * blockSize + borderWidth, y * blockSize + borderWidth, blockSize - 2 * borderWidth, blockSize - 2 * borderWidth); // Заполнение блока без контура
   }
 
   drawBoard(ctx) {
     ctx.clearRect(0, 0, numCols * blockSize, numRows * blockSize);
     ctx.strokeStyle = 'black';
-
-    const { board } = this.state;
+  
+    const { board, currentShape, currentX, currentY } = this.state;
     for (let y = 0; y < numRows; y++) {
       for (let x = 0; x < numCols; x++) {
-        if (board[y][x]) {
-          ctx.fillStyle = 'blue';
-          this.drawBlock(ctx, x, y);
+        if (board[y][x] || 
+          (y >= currentY && y < currentY + currentShape.length 
+          && x >= currentX && x < currentX + currentShape[0].length 
+          && currentShape[y - currentY][x - currentX]
+          )) {
+          this.drawBlock(ctx, x, y, '#0f15ad');
         }
       }
     }
@@ -161,7 +173,7 @@ class Tetris extends React.Component {
   
     this.setState((prevState) => ({ shapesGenerated: prevState.shapesGenerated + 1 }));
 
-    if ((shapesGenerated + 1) % 10 === 0 && shapesGenerated !== 0 && speed > 100) {
+    if ((shapesGenerated + 1) % 10 === 0 && shapesGenerated !== 0 && speed > 199) {
       const newSpeed = speed - 25;
       this.setState({ speed: newSpeed });
       
@@ -201,6 +213,7 @@ class Tetris extends React.Component {
   }
 
   handleKeyPress = (event) => {
+    event.preventDefault();
     if (!this.state.gameOver) {
       if (event.key === 'ArrowLeft') {
         this.moveShapeHorizontally(-1);
@@ -288,9 +301,12 @@ class Tetris extends React.Component {
     const { gameOver, score } = this.state;
 
     return (
-      <div className="container">
+      <div className="tetris">
         <h1>Tetris</h1>
-        <div>Score: {score}</div>
+        <div className='t-header'>
+          <div>Score: {score}</div>
+          <button onClick={this.restartGame}>Restart</button>
+        </div>
         <canvas
           ref={(canvas) => {
             this.canvas = canvas;
@@ -303,8 +319,7 @@ class Tetris extends React.Component {
           width={numCols * blockSize}
           height={numRows * blockSize}
         ></canvas>
-        {gameOver && <div className="game-over">Game Over</div>}
-        <div><button onClick={this.restartGame}>Restart</button></div>
+        {gameOver && <h2 className="t-game-over">Game Over</h2>}
       </div>
     );
   }
