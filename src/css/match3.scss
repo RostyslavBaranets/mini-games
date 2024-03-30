@@ -1,48 +1,67 @@
+@import "const.scss";
+
 .match3-game {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.score {
-  display: flex;
-}
-
-.board {
-  border: 2px solid #333;
-  display: flex;
-  flex-direction: column;
-}
-
-.row {
-  display: flex;
-}
-
-.cell {
-  border: 1px solid #ddd;
-  box-sizing: border-box;
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 3px solid $clr2;
+  border-radius: 10px;
+  background-color: $clr1;
   text-align: center;
-  transition: all 0.3s ease;
+  box-shadow: 0 0 30px 0px $clr3;
+  .m3-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    font-size: 20px;
+  }
+  .m3-board {
+    border: 2px solid $clr2;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0px $clr3;
+    display: flex;
+    flex-direction: column;
+    .m3-row {
+      display: flex;
+      .m3-cell {
+        border: 5px solid $clr1;
+        border-radius: 8px;
+        box-sizing: border-box;
+        text-align: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        transition: all 0.3s ease;
+      }
+      .red {
+        background-image: url(../img/m3-red.png);
+      }
+      .green {
+        background-image: url(../img/m3-green.png);
+      }
+      .blue {
+        background-image: url(../img/m3-blue.png);
+      }
+      .yellow {
+        background-image: url(../img/m3-yellow.png);
+      }
+      .purple {
+        background-image: url(../img/m3-purple.png);
+      }
+    }
+  }
+  .m3-game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: #ff0000;
+    background-color: $clr1;
+    padding: 5px;
+    border: 5px solid $clr2;
+    border-radius: 10px;
+  }
 }
 
-.red {
-  background-color: red;
-}
 
-.green {
-  background-color: green;
-}
-
-.blue {
-  background-color: blue;
-}
-
-.yellow {
-  background-color: yellow;
-}
-
-.purple {
-  background-color: purple;
-}

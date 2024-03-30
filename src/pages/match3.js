@@ -255,17 +255,18 @@ class Match3 extends React.Component {
     return (
       <div className="match3-game">
         <h1>Match3</h1>
-        <div className="score">Score: {score}</div>
-        <div className="time-left">Time Left: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</div>
-        {gameOver && <div className="game-over">Game Over</div>}
-        <div><button onClick={this.restartGame}>Restart</button></div>
-        <div className="board">
+        <div className="m3-header">
+          <div className="m3-score">Score: {score}</div>
+          <div className="m3-time">Time Left: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</div>
+          <button onClick={this.restartGame}>Restart</button>
+        </div>
+        <div className="m3-board">
           {board.map((row, rowIndex) => (
-            <div key={rowIndex} className="row">
+            <div key={rowIndex} className="m3-row">
               {row.map((cell, colIndex) => (
                 <div
                   key={colIndex}
-                  className={`cell ${cell}`}
+                  className={`m3-cell ${cell}`}
                   style={{
                     width: CELL_SIZE,
                     height: CELL_SIZE,
@@ -273,12 +274,12 @@ class Match3 extends React.Component {
                   }}
                   onClick={() => this.handleClick(rowIndex, colIndex)}
                 >
-                  {cell}
                 </div>
               ))}
             </div>
           ))}
         </div>
+        {gameOver && <h2 className="m3-game-over">Game Over</h2>}
       </div>
     );
   }

@@ -199,24 +199,24 @@ class Game2048 extends Component {
   render() {
     const { board, score, gameOver } = this.state;
     return (
-      <div className="game-container">
-        <div className="header">
-          <h1>2048</h1>
+      <div className="game2048">
+        <h1>2048</h1>
+        <div className="g2-header">
+          <div className="g2-score">Score: {score}</div>
           <button onClick={this.restartGame}>Restart</button>
-          <div className="score">Score: {score}</div>
         </div>
-        <div className="board">
+        <div className="g2-board">
           {board.map((row, rowIndex) => (
-            <div key={rowIndex} className="row">
+            <div key={rowIndex} className="g2-row">
               {row.map((tile, colIndex) => (
-                <div key={`${rowIndex}-${colIndex}`} className={`tile tile-${tile}`}>
+                <div key={`${rowIndex}-${colIndex}`} className={`g2-tile tile-${tile}`}>
                   {tile}
                 </div>
               ))}
             </div>
           ))}
         </div>
-        {gameOver && <div className="game-over">Game Over</div>}
+        {gameOver && <h2 className="g2-game-over">Game Over</h2>}
       </div>
     );
   }
