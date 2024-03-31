@@ -1,47 +1,81 @@
+@import "const.scss";
+
+@keyframes moveBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
 .flappybird {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.flappybird-game {
-  position: relative;
-  width: 500px;
-  height: 600px;
-  border: 1px solid black;
-  overflow: hidden;
-}
-
-.bird {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  left: 100px;
-  background-color: red;
-}
-
-.fb-score {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-.fb-gameover {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 30%;                     
-  left: 38%;
-}
-
-.pipe {
-  position: absolute;
-  width: 75px;
-  background-color: green;
-}
-
-.pipe:nth-child(odd) {
-  transform: scaleY(-1);
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 3px solid $clr2;
+  border-radius: 10px;
+  background-color: $clr1;
+  text-align: center;
+  box-shadow: 0 0 30px 0px $clr3;
+  .fb-board {
+    position: relative;
+    width: 450px;
+    height: 600px;
+    margin-top: 20px;
+    border: 2px solid $clr2;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0px $clr3;
+    overflow: hidden;
+    cursor: pointer;
+    background-image: url('../img/fb-bg.png');
+    background-position-y: center;
+    background-size: cover;
+    animation: moveBackground 120s linear infinite;
+    .fb-score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: $clr2;
+    }
+    .fb-bird {
+      position: absolute;
+      width: 50px;
+      height: 40px;
+      left: 50px;
+      background-image: url(../img/bird.png);
+      background-position: center;
+      background-size:contain;
+      background-repeat: no-repeat;
+      background-clip: content-box;
+    }
+    .fb-pipe {
+      position: absolute;
+      width: 75px;
+      background-image: url('../img/fb-pipe.png');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position-y: 0;
+      transform: scaleY(-1);
+      &:nth-child(odd) {
+        background-position-y: 0;
+        transform: scaleY(1);
+      }
+    }
+    .fb-game-over {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      border: 3px solid $clr2;
+      border-radius: 10px;
+      background-color: $clr1;
+      box-shadow: 0 0 30px 0px $clr3;
+    }
+  }
 }

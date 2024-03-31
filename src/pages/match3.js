@@ -79,11 +79,12 @@ class Match3 extends React.Component {
   handleClick(row, col) {
     if (this.state.isAnimating || this.state.gameOver) return;
 
+    const clickedCell = document.querySelector(`.m3-board .m3-row:nth-child(${row + 1}) .m3-cell:nth-child(${col + 1})`);
     this.isMatched = false;
-    const { selectedCell } = this.state;
+    const { selectedCell, board } = this.state;
 
     if (selectedCell) {
-      if (this.areNeighbors(selectedCell, { row, col })) {
+      if (this.areNeighbors(selectedCell, { row, col }) && board[selectedCell.row][selectedCell.col] !== board[row][col]) {
         const newBoard = this.swapCells(selectedCell, { row, col });
         this.setState({ board: newBoard, isAnimating: true });
 
@@ -99,11 +100,15 @@ class Match3 extends React.Component {
         }, 300);
         this.setState({ selectedCell: null });
       } else {
+        const clickedSelectedCell = document.querySelector(`.m3-board .m3-row:nth-child(${selectedCell.row + 1}) .m3-cell:nth-child(${selectedCell.col + 1})`);
+        clickedSelectedCell.classList.remove('clicked');
         this.setState({ selectedCell: { row, col } });
       }
     } else {
       this.setState({ selectedCell: { row, col } });
     }
+
+    clickedCell.classList.add('clicked');
   }
 
   removeCellsInRow(row, startCol, endCol, board) {
@@ -185,7 +190,6 @@ class Match3 extends React.Component {
 
     if (foundMatch) {
       this.isMatched = foundMatch;
-      console.log(this.isMatched, foundMatch)
       setTimeout(() => {
         this.setState({ board: newBoard, score: newScore });
         this.fallingCell();

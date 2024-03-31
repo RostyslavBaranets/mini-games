@@ -32,6 +32,10 @@
         background-size: contain;
         background-repeat: no-repeat;
         transition: all 0.3s ease;
+        cursor: pointer;
+        &.clicked {
+          border-width: 0;
+        }
       }
       .red {
         background-image: url(../img/m3-red.png);

@@ -173,7 +173,7 @@ class Tetris extends React.Component {
   
     this.setState((prevState) => ({ shapesGenerated: prevState.shapesGenerated + 1 }));
 
-    if ((shapesGenerated + 1) % 10 === 0 && shapesGenerated !== 0 && speed > 199) {
+    if ((shapesGenerated + 1) % 10 === 0 && shapesGenerated !== 0 && speed > 200) {
       const newSpeed = speed - 25;
       this.setState({ speed: newSpeed });
       
