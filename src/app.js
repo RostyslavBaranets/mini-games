@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './components/header';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Navigation from './components/navigation';
 import Tetris from './pages/tetris';
 import Minesweeper from './pages/minesweeper';
@@ -18,6 +18,7 @@ class App extends React.Component{
           <main>
             <Navigation />
             <Routes>
+              <Route path="/mini-games" element={<Navigate to="/mini-games/minesweeper" />} />
               <Route path="/mini-games/minesweeper" element={<Minesweeper />} />
               <Route path="/mini-games/tetris" element={<Tetris />} />
               <Route path="/mini-games/match3" element={<Match3 />} />
