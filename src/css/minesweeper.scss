@@ -9,15 +9,25 @@
   background-color: $clr1;
   text-align: center;
   box-shadow: 0 0 30px 0px $clr3;
+  @media only screen and (max-width: 600px) {
+    max-width: 100%;
+    padding: 10px;
+    margin-bottom: 40px;
+  }
   .ms-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 10px;
     font-size: 20px;
+    .active {
+      background-color: $clr2;
+      box-shadow: 0 0 5px 0px $clr3;
+    }
   }
   .ms-grid {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     .ms-row {
       display: flex;
       .ms-cell {
@@ -36,12 +46,17 @@
         &.revealed {
           background-color: $clr1;
         }
+        @media only screen and (max-width: 600px) {
+          width: 35px;
+          height: 35px;
+          font-size: 20px;
+        }
       }
     }
   }
   .ms-message {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
@@ -50,6 +65,9 @@
     padding: 5px;
     border: 5px solid $clr2;
     border-radius: 10px;
+    @media only screen and (max-width: 600px) {
+      top: 80%;
+    }
   }
 }
 

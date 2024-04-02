@@ -17,6 +17,7 @@ class Minesweeper extends React.Component {
       timerInterval: null,
       started: false,
       flags: numMines,
+      flagMode: false,
     };
   }
 
@@ -41,6 +42,7 @@ class Minesweeper extends React.Component {
       timerInterval: null,
       started: false,
       flags: numMines,
+      flagMode: false,
     });
   }
 
@@ -101,10 +103,15 @@ class Minesweeper extends React.Component {
     return grid;
   }
 
-  handleClick(x, y) {
-    const { gameOver, win, grid, started } = this.state;
+  handleClick(e, x, y) {
+    const { gameOver, win, grid, started, flagMode } = this.state;
     if (gameOver || win || grid[x][y].revealed || grid[x][y].flagged) return;
     
+    if (flagMode) {
+      this.handleRightClick(e, x, y);
+      return;
+    }
+
     let newGrid = [...grid];
     
     newGrid[x][y].revealed = true;
@@ -250,7 +257,7 @@ class Minesweeper extends React.Component {
       <div
         key={`${cell.x}-${cell.y}`}
         className={`ms-cell ${cell.revealed ? 'revealed' : ''}`}
-        onClick={() => this.handleClick(cell.x, cell.y)}
+        onClick={(e) => this.handleClick(e, cell.x, cell.y)}
         onContextMenu={(e) => this.handleRightClick(e, cell.x, cell.y)}
       >
         {content}
@@ -258,15 +265,24 @@ class Minesweeper extends React.Component {
     );
   }
 
+  toggleFlagMode = () => {
+    this.setState(prevState => ({
+      flagMode: !prevState.flagMode,
+    }));
+  }
+
   render() {
-    const { grid, gameOver, win, timer, flags } = this.state;
+    const { grid, gameOver, win, timer, flags, flagMode } = this.state;
 
     return (
       <div className="minesweeper">
         <h1>Minesweeper</h1>
         <div className="ms-header">
           <div className="ms-timer">Time: {timer}</div>
-          <div className="ms-flags">Flags: {flags}</div>
+          <div className="ms-flags">
+            <button className={`ms-flag-btn ${flagMode ? 'active' : ''}`} onClick={this.toggleFlagMode}>🚩</button>
+            : {flags}
+            </div>
           <button onClick={() => this.resetGame()}>New Game</button>
         </div>
         <div className="ms-grid">
