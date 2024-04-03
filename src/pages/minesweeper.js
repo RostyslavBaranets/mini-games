@@ -285,6 +285,8 @@ class Minesweeper extends React.Component {
             </div>
           <button onClick={() => this.resetGame()}>New Game</button>
         </div>
+        {gameOver && <h2 className="ms-message">Game Over</h2>}
+        {win && <h2 className="ms-message">You Win!</h2>}
         <div className="ms-grid">
           {grid.map((row, rowIndex) => (
             <div key={rowIndex} className="ms-row">
@@ -292,8 +294,6 @@ class Minesweeper extends React.Component {
             </div>
           ))}
         </div>
-        {gameOver && <h2 className="ms-message">Game Over</h2>}
-        {win && <h2 className="ms-message">You Win!</h2>}
       </div>
     );
   }

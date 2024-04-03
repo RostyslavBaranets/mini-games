@@ -7,7 +7,9 @@ class Game2048 extends Component {
     this.state = {
       board: this.startGame(),
       score: 0,
-      gameOver: false
+      gameOver: false,
+      touchStartX: 0,
+      touchStartY: 0,
     };
   }
 
@@ -33,6 +35,41 @@ class Game2048 extends Component {
         event.preventDefault();
         const direction = key.replace('Arrow', '').toLowerCase();
         this.moveTiles(direction);
+      }
+    }
+  }
+
+  handleTouchStart = (event) => {
+    event.preventDefault();
+    if (!this.state.gameOver && event.touches.length === 1) {
+      const touch = event.touches[0];
+      this.setState({
+        touchStartX: touch.clientX,
+        touchStartY: touch.clientY,
+      });
+    }
+  }
+
+  handleTouchMove = (event) => {
+    event.preventDefault();
+    if (!this.state.gameOver && event.touches.length === 1) {
+      const touch = event.touches[0];
+      const deltaX = touch.clientX - this.state.touchStartX;
+      const deltaY = touch.clientY - this.state.touchStartY;
+      const threshold = 50;
+
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX > threshold) {
+          this.moveTiles('right');
+        } else if (deltaX < -threshold) {
+          this.moveTiles('left');
+        }
+      } else {
+        if (deltaY > threshold) {
+          this.moveTiles('down');
+        } else if (deltaY < -threshold) {
+          this.moveTiles('up');
+        }
       }
     }
   }
@@ -205,7 +242,8 @@ class Game2048 extends Component {
           <div className="g2-score">Score: {score}</div>
           <button onClick={this.restartGame}>Restart</button>
         </div>
-        <div className="g2-board">
+        {gameOver && <h2 className="g2-game-over">Game Over</h2>}
+        <div className="g2-board" onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove}>
           {board.map((row, rowIndex) => (
             <div key={rowIndex} className="g2-row">
               {row.map((tile, colIndex) => (
@@ -216,7 +254,6 @@ class Game2048 extends Component {
             </div>
           ))}
         </div>
-        {gameOver && <h2 className="g2-game-over">Game Over</h2>}
       </div>
     );
   }

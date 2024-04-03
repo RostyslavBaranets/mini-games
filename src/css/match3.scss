@@ -9,6 +9,10 @@
   background-color: $clr1;
   text-align: center;
   box-shadow: 0 0 30px 0px $clr3;
+  @media only screen and (max-width: 600px) {
+    max-width: 100%;
+    margin-bottom: 40px;
+  }
   .m3-header {
     display: flex;
     justify-content: space-between;
@@ -22,9 +26,13 @@
     box-shadow: 0 0 10px 0px $clr3;
     display: flex;
     flex-direction: column;
+    align-items: center;
     .m3-row {
       display: flex;
       .m3-cell {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
         border: 5px solid $clr1;
         border-radius: 8px;
         box-sizing: border-box;
@@ -35,6 +43,13 @@
         cursor: pointer;
         &.clicked {
           border-width: 0;
+        }
+        @media only screen and (max-width: 600px) {
+          width: 40px;
+          height: 40px;
+          &.clicked {
+            border-width: 1;
+          }
         }
       }
       .red {
@@ -55,9 +70,11 @@
     }
   }
   .m3-game-over {
-    position: absolute;
-    top: 50%;
+    position: relative;
+    width: 200px;
+    top: 250px;
     left: 50%;
+    margin-top: -50px;
     transform: translate(-50%, -50%);
     font-weight: bold;
     color: #ff0000;
@@ -65,6 +82,9 @@
     padding: 5px;
     border: 5px solid $clr2;
     border-radius: 10px;
+    @media only screen and (max-width: 600px) {
+      top: 225px;
+    }
   }
 }
 

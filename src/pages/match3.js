@@ -3,7 +3,6 @@ import '../css/match3.scss';
 
 const ROWS = 8;
 const COLS = 8;
-const CELL_SIZE = 50;
 const GAME_DURATION = 3 * 60 * 1000;
 
 class Match3 extends React.Component {
@@ -264,26 +263,16 @@ class Match3 extends React.Component {
           <div className="m3-time">Time Left: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</div>
           <button onClick={this.restartGame}>Restart</button>
         </div>
+        {gameOver && <h2 className="m3-game-over">Game Over</h2>}
         <div className="m3-board">
           {board.map((row, rowIndex) => (
             <div key={rowIndex} className="m3-row">
               {row.map((cell, colIndex) => (
-                <div
-                  key={colIndex}
-                  className={`m3-cell ${cell}`}
-                  style={{
-                    width: CELL_SIZE,
-                    height: CELL_SIZE,
-                    lineHeight: `${CELL_SIZE}px`
-                  }}
-                  onClick={() => this.handleClick(rowIndex, colIndex)}
-                >
-                </div>
+                <div key={colIndex} className={`m3-cell ${cell}`} onClick={() => this.handleClick(rowIndex, colIndex)}></div>
               ))}
             </div>
           ))}
         </div>
-        {gameOver && <h2 className="m3-game-over">Game Over</h2>}
       </div>
     );
   }

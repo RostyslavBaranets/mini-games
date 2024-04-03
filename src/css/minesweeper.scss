@@ -55,9 +55,11 @@
     }
   }
   .ms-message {
-    position: absolute;
-    top: 55%;
+    position: relative;
+    width: 200px;
+    top: 300px;
     left: 50%;
+    margin-top: -50px;
     transform: translate(-50%, -50%);
     font-weight: bold;
     color: #ff0000;
@@ -66,7 +68,7 @@
     border: 5px solid $clr2;
     border-radius: 10px;
     @media only screen and (max-width: 600px) {
-      top: 80%;
+      top: 225px;
     }
   }
 }

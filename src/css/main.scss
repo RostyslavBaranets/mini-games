@@ -12,6 +12,7 @@ a {
 
 #root {
   height: 100%;
+  user-select: none;
 }
 
 .body {
@@ -39,11 +40,8 @@ button {
   padding: 5px 10px;
   border: 5px solid $clr2;
   border-radius: 10px;
+  user-select: none;
   &:hover {
-    background-color: $clr2;
-    box-shadow: 0 0 5px 0px $clr3;
-  }
-  &:active {
     background-color: $clr2;
     box-shadow: 0 0 5px 0px $clr3;
   }
