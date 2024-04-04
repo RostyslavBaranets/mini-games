@@ -3,7 +3,7 @@ import '../css/tetris.scss';
 
 const numRows = 25;
 const numCols = 15;
-const blockSize = 25;
+const blockSize = window.innerWidth > 600? 25 : 22;
 
 const shapes = [
   [
@@ -62,6 +62,29 @@ class Tetris extends React.Component {
     clearInterval(this.state.interval);
     document.removeEventListener('keydown', this.handleKeyPress);
   }
+
+  handleTouchStart = (event) => {
+    event.preventDefault();
+  
+  const { id } = event.target;
+
+  switch (id) {
+    case 'left-btn':
+      this.moveShapeHorizontally(-1);
+      break;
+    case 'right-btn':
+      this.moveShapeHorizontally(1);
+      break;
+    case 'rotate-btn':
+      this.rotateShape();
+      break;
+    case 'down-btn':
+      this.moveShapeDown();
+      break;
+    default:
+      break;
+    }
+  };
 
   createBoard() {
     const board = [];
@@ -303,10 +326,11 @@ class Tetris extends React.Component {
     return (
       <div className="tetris">
         <h1>Tetris</h1>
-        <div className='t-header'>
+        <div className="t-header">
           <div>Score: {score}</div>
           <button onClick={this.restartGame}>Restart</button>
         </div>
+        {gameOver && <h2 className="t-game-over">Game Over</h2>}
         <canvas
           ref={(canvas) => {
             this.canvas = canvas;
@@ -318,8 +342,18 @@ class Tetris extends React.Component {
           }}
           width={numCols * blockSize}
           height={numRows * blockSize}
-        ></canvas>
-        {gameOver && <h2 className="t-game-over">Game Over</h2>}
+        >
+        </canvas>
+        {blockSize === 22 && <div className="t-btn-block">
+          <div className="t-btn-block-left">
+            <button id="left-btn" className="t-btn t-btn-left" onTouchStart={this.handleTouchStart}>◄</button>
+            <button id="right-btn" className="t-btn t-btn-right" onTouchStart={this.handleTouchStart}>►</button>
+          </div>
+          <div className="t-btn-block-right">
+            <button id="rotate-btn" className="t-btn t-btn-rotate" onTouchStart={this.handleTouchStart}>⟲</button>
+            <button id="down-btn" className="t-btn t-btn-down" onTouchStart={this.handleTouchStart}>▼</button>
+          </div>
+        </div>}
       </div>
     );
   }

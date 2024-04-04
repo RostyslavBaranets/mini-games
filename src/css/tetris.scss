@@ -9,6 +9,13 @@
   background-color: $clr1;
   text-align: center;
   box-shadow: 0 0 30px 0px $clr3;
+  display: flex;
+  flex-direction: column;
+  @media only screen and (max-width: 600px) {
+    max-width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 40px;
+  }
   .t-header {
     display: flex;
     justify-content: space-between;
@@ -25,9 +32,11 @@
     background-attachment: fixed;
   }
   .t-game-over {
-    position: absolute;
-    top: 50%;
+    position: relative;
+    width: 200px;
+    top: 340px;
     left: 50%;
+    margin-top: -50px;
     transform: translate(-50%, -50%);
     font-weight: bold;
     color: #ff0000;
@@ -35,6 +44,43 @@
     padding: 5px;
     border: 5px solid $clr2;
     border-radius: 10px;
+    @media only screen and (max-width: 600px) {
+      top: 260px;
+    }
+  }
+  .t-btn-block {
+    position: relative;
+    padding: 10px;
+    margin-top: -180px;
+    display: flex;
+    justify-content: space-between;
+    .t-btn-block-left {
+      display: flex;
+      align-items: center;
+    }
+    .t-btn-block-right {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .t-btn {
+    height: 80px;
+    width: 80px;
+    font-size: 40px;
+    padding: 0;
+    border-top: 8px solid $celltop;
+    border-left: 8px solid $celltop;
+    border-bottom: 8px solid $cellbottom;
+    border-right: 8px solid $cellbottom;
+    background-color: #5e2a6693;
+    color: #ede375;
+    opacity: 0.8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      box-shadow: none;
+    }
   }
 }
 

@@ -40,35 +40,38 @@ class Game2048 extends Component {
   }
 
   handleTouchStart = (event) => {
-    event.preventDefault();
     if (!this.state.gameOver && event.touches.length === 1) {
       const touch = event.touches[0];
       this.setState({
         touchStartX: touch.clientX,
         touchStartY: touch.clientY,
+        swiped: false,
       });
     }
   }
 
   handleTouchMove = (event) => {
-    event.preventDefault();
-    if (!this.state.gameOver && event.touches.length === 1) {
+    if (!this.state.gameOver && event.touches.length === 1 && !this.state.swiped) {
       const touch = event.touches[0];
       const deltaX = touch.clientX - this.state.touchStartX;
       const deltaY = touch.clientY - this.state.touchStartY;
       const threshold = 50;
-
+  
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
         if (deltaX > threshold) {
           this.moveTiles('right');
+          this.setState({ swiped: true });
         } else if (deltaX < -threshold) {
           this.moveTiles('left');
+          this.setState({ swiped: true });
         }
       } else {
         if (deltaY > threshold) {
           this.moveTiles('down');
+          this.setState({ swiped: true });
         } else if (deltaY < -threshold) {
           this.moveTiles('up');
+          this.setState({ swiped: true });
         }
       }
     }

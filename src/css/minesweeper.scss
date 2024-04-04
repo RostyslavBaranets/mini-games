@@ -20,6 +20,11 @@
     align-items: center;
     margin: 10px;
     font-size: 20px;
+    .ms-flag-btn {
+      &:hover {
+        background-color: transparent;
+      }
+    }
     .active {
       background-color: $clr2;
       box-shadow: 0 0 5px 0px $clr3;
